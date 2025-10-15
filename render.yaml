@@ -1,7 +1,16 @@
 services:
   - type: web
-    name: laravel-app
+    name: citizen-complaint-system
     env: docker
     plan: free
-    autoDeploy: true
-    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://citizen-complaint-system.onrender.com
+      - key: DB_CONNECTION
+        value: sqlite
