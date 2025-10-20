@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'national_id' => ['required', 'string', 'max:20', 'unique:'.User::class],
             'national_id_image' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048'], // 2MB max
             'date_of_birth' => ['required', 'date', 'before:today'],
-            'age' => ['required', 'integer', 'min:18', 'max:120'],
+            'age' => ['nullable', 'integer', 'min:18', 'max:120'], // Age is auto-calculated
             'gender' => ['required', 'in:male,female,other'],
             'civil_status' => ['required', 'in:single,married,widowed,separated,divorced'],
             'phone' => ['required', 'string', 'max:20'],
@@ -51,7 +51,8 @@ class RegisteredUserController extends Controller
             'zip_code' => ['nullable', 'string', 'max:10'],
             'occupation' => ['nullable', 'string', 'max:255'],
             'emergency_contact_name' => ['nullable', 'string', 'max:255'],
-            'emergency_contact_number' => ['nullable', 'string', 'max:20'],
+            'emergency_contact_phone' => ['nullable', 'string', 'max:20'],
+            'emergency_contact_relationship' => ['nullable', 'string', 'max:255'],
         ]);
 
         // Combine address for the old address field

@@ -2,11 +2,9 @@
 
 namespace App\Services;
 
-use Endroid\QrCode\QrCode;
-use Endroid\QrCode\Writer\PngWriter;
-use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
-use Endroid\QrCode\RoundBlockSizeMode;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 use Illuminate\Support\Facades\Storage;
 
 class QRCodeService
@@ -29,19 +27,20 @@ class QRCodeService
             'generated_at' => now()->toIso8601String(),
         ]);
 
-        $qrCode = QrCode::create($qrData)
-            ->setEncoding(new Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
-            ->setSize(300)
-            ->setMargin(10)
-            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin);
-
-        $writer = new PngWriter();
-        $result = $writer->write($qrCode);
+        // Create QR code writer with SVG renderer
+        $writer = new Writer(
+            new \BaconQrCode\Renderer\ImageRenderer(
+                new RendererStyle(300),
+                new SvgImageBackEnd()
+            )
+        );
+        
+        // Generate QR code as SVG string
+        $qrCodeSvg = $writer->writeString($qrData);
 
         // Save to storage
-        $filename = 'qr-codes/user-' . $userId . '-' . time() . '.png';
-        Storage::disk('public')->put($filename, $result->getString());
+        $filename = 'qr-codes/user-' . $userId . '-' . time() . '.svg';
+        Storage::disk('public')->put($filename, $qrCodeSvg);
 
         return $filename;
     }

@@ -16,28 +16,28 @@
                     <!-- First Name -->
                     <div>
                         <x-input-label for="first_name" :value="__('First Name')" />
-                        <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
+                        <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus @input="filterAlphabeticOnly('first_name')" />
                         <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
                     </div>
 
                     <!-- Middle Name -->
                     <div>
                         <x-input-label for="middle_name" :value="__('Middle Name (Optional)')" />
-                        <x-text-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')" />
+                        <x-text-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')" @input="filterAlphabeticOnly('middle_name')" />
                         <x-input-error :messages="$errors->get('middle_name')" class="mt-2" />
                     </div>
 
                     <!-- Last Name -->
                     <div>
                         <x-input-label for="last_name" :value="__('Last Name')" />
-                        <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required />
+                        <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required @input="filterAlphabeticOnly('last_name')" />
                         <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
                     </div>
 
                     <!-- Suffix -->
                     <div>
                         <x-input-label for="suffix" :value="__('Suffix (Jr, Sr, III, etc.)')" />
-                        <x-text-input id="suffix" class="block mt-1 w-full" type="text" name="suffix" :value="old('suffix')" placeholder="Jr, Sr, III" />
+                        <x-text-input id="suffix" class="block mt-1 w-full" type="text" name="suffix" :value="old('suffix')" placeholder="Jr, Sr, III" @input="filterAlphabeticOnly('suffix')" />
                         <x-input-error :messages="$errors->get('suffix')" class="mt-2" />
                     </div>
 
@@ -51,7 +51,11 @@
                     <!-- Age -->
                     <div>
                         <x-input-label for="age" :value="__('Age')" />
-                        <x-text-input id="age" class="block mt-1 w-full" type="number" name="age" x-model="age" readonly />
+                        <div class="block mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700 font-medium">
+                            <span x-text="age || '—'"></span>
+                        </div>
+                        <input id="age" type="hidden" name="age" x-model="age" />
+                        <p class="mt-1 text-xs text-gray-500">Automatically calculated from date of birth</p>
                         <x-input-error :messages="$errors->get('age')" class="mt-2" />
                     </div>
 
@@ -84,7 +88,7 @@
                     <!-- Occupation -->
                     <div class="md:col-span-2">
                         <x-input-label for="occupation" :value="__('Occupation (Optional)')" />
-                        <x-text-input id="occupation" class="block mt-1 w-full" type="text" name="occupation" :value="old('occupation')" placeholder="e.g., Teacher, Engineer, Self-employed" />
+                        <x-text-input id="occupation" class="block mt-1 w-full" type="text" name="occupation" :value="old('occupation')" placeholder="e.g., Teacher, Engineer, Self-employed" @input="filterAlphabeticOnly('occupation')" />
                         <x-input-error :messages="$errors->get('occupation')" class="mt-2" />
                     </div>
                 </div>
@@ -98,8 +102,8 @@
                     <!-- National ID Number -->
                     <div>
                         <x-input-label for="national_id" :value="__('Philippine National ID Number')" />
-                        <x-text-input id="national_id" class="block mt-1 w-full" type="text" name="national_id" :value="old('national_id')" required placeholder="XXXX-XXXX-XXXX-XXXX" />
-                        <p class="mt-1 text-xs text-gray-500">Enter your Philippine National ID number for verification</p>
+                        <x-text-input id="national_id" class="block mt-1 w-full uppercase" type="text" name="national_id" :value="old('national_id')" required placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" @input="formatNationalId($event)" />
+                        <p class="mt-1 text-xs text-gray-500">Format: 4 digits - 4 digits - 4 digits - 4 digits (auto-formatted)</p>
                         <x-input-error :messages="$errors->get('national_id')" class="mt-2" />
                     </div>
 
@@ -144,14 +148,14 @@
                     <!-- Email -->
                     <div class="md:col-span-2">
                         <x-input-label for="email" :value="__('Email Address')" />
-                        <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                        <x-text-input id="email" class="block mt-1 w-full lowercase" type="email" name="email" :value="old('email')" required />
                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
 
                     <!-- Phone -->
                     <div class="md:col-span-2">
                         <x-input-label for="phone" :value="__('Phone Number')" />
-                        <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required placeholder="09XXXXXXXXX" />
+                        <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" />
                         <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                     </div>
                 </div>
@@ -214,15 +218,22 @@
                     <!-- Emergency Contact Name -->
                     <div>
                         <x-input-label for="emergency_contact_name" :value="__('Contact Person Name')" />
-                        <x-text-input id="emergency_contact_name" class="block mt-1 w-full" type="text" name="emergency_contact_name" :value="old('emergency_contact_name')" />
+                        <x-text-input id="emergency_contact_name" class="block mt-1 w-full" type="text" name="emergency_contact_name" :value="old('emergency_contact_name')" @input="filterAlphabeticOnly('emergency_contact_name')" />
                         <x-input-error :messages="$errors->get('emergency_contact_name')" class="mt-2" />
                     </div>
 
-                    <!-- Emergency Contact Number -->
+                    <!-- Emergency Contact Relationship -->
                     <div>
-                        <x-input-label for="emergency_contact_number" :value="__('Contact Number')" />
-                        <x-text-input id="emergency_contact_number" class="block mt-1 w-full" type="text" name="emergency_contact_number" :value="old('emergency_contact_number')" placeholder="09XXXXXXXXX" />
-                        <x-input-error :messages="$errors->get('emergency_contact_number')" class="mt-2" />
+                        <x-input-label for="emergency_contact_relationship" :value="__('Relationship')" />
+                        <x-text-input id="emergency_contact_relationship" class="block mt-1 w-full" type="text" name="emergency_contact_relationship" :value="old('emergency_contact_relationship')" placeholder="e.g., Mother, Sister, Friend" @input="filterAlphabeticOnly('emergency_contact_relationship')" />
+                        <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-2" />
+                    </div>
+
+                    <!-- Emergency Contact Phone -->
+                    <div class="md:col-span-2">
+                        <x-input-label for="emergency_contact_phone" :value="__('Contact Phone Number')" />
+                        <x-text-input id="emergency_contact_phone" class="block mt-1 w-full" type="text" name="emergency_contact_phone" :value="old('emergency_contact_phone')" placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" />
+                        <x-input-error :messages="$errors->get('emergency_contact_phone')" class="mt-2" />
                     </div>
                 </div>
             </div>
@@ -280,6 +291,48 @@
                         
                         this.age = age;
                     }
+                },
+                filterAlphabeticOnly(fieldId) {
+                    const field = document.getElementById(fieldId);
+                    // Allow only letters, spaces, and hyphens
+                    field.value = field.value.replace(/[^a-zA-Z\s\-]/g, '');
+                },
+                formatPhoneNumber(event) {
+                    // Remove all non-numeric characters
+                    let value = event.target.value.replace(/\D/g, '');
+                    
+                    // Limit to 11 digits
+                    if (value.length > 11) {
+                        value = value.slice(0, 11);
+                    }
+                    
+                    // Enforce 09 prefix
+                    if (value.length > 0 && !value.startsWith('09')) {
+                        value = '09' + value.replace(/^0+/, '').slice(0, 9);
+                    }
+                    
+                    event.target.value = value;
+                },
+                formatNationalId(event) {
+                    // Remove all non-numeric characters
+                    let value = event.target.value.replace(/\D/g, '');
+                    
+                    // Limit to 16 digits
+                    if (value.length > 16) {
+                        value = value.slice(0, 16);
+                    }
+                    
+                    // Format with dashes every 4 digits
+                    let formatted = '';
+                    for (let i = 0; i < value.length; i++) {
+                        if (i > 0 && i % 4 === 0) {
+                            formatted += '-';
+                        }
+                        formatted += value[i];
+                    }
+                    
+                    // Update the input value
+                    event.target.value = formatted;
                 },
                 previewImage(event) {
                     const file = event.target.files[0];
