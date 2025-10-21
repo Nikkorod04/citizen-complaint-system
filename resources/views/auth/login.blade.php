@@ -76,8 +76,8 @@
         <div class="mt-6 p-4 bg-blue-50 rounded-lg">
             <p class="text-xs font-semibold text-blue-900 mb-2">Test Accounts:</p>
             <div class="text-xs text-blue-800 space-y-1">
-                <p><strong>Captain:</strong> captain@barangay.local / password</p>
-                <p><strong>Secretary:</strong> secretary@barangay.local / password</p>
+                <p><strong>Captain:</strong> captain@mail.com / password</p>
+                <p><strong>Secretary:</strong> secretary@mail.com / password</p>
             </div>
         </div>
     </form>

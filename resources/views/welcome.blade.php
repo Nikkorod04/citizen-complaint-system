@@ -15,10 +15,8 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                        <svg class="h-8 w-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                        <span class="ml-2 text-xl font-bold text-gray-900">Barangay Complaint System</span>
+                        <img src="{{ asset('/logo.png') }}" alt="Logo" class="h-10 w-10 object-contain">
+                        <span class="ml-3 text-xl font-bold text-gray-900">Barangay Complaint System</span>
                     </div>
                     <div class="flex items-center space-x-4">
                         @auth
