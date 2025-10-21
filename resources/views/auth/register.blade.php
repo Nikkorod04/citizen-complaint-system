@@ -1,274 +1,297 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        <h2 class="text-xl font-semibold text-gray-900 mb-2">Citizen Registration</h2>
-        <p>Register to file complaints with your barangay. Please fill in all required information accurately.</p>
-    </div>
-
-    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" x-data="registrationForm()">
+    <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data" x-data="registrationForm()" class="w-full">
         @csrf
 
-        <div class="space-y-6">
+        <!-- Header -->
+        <div class="mb-6 text-center">
+            <h2 class="text-2xl font-bold text-white mb-1">Create Your Account</h2>
+            <p class="text-white/60 text-sm">Join us and make your voice heard in the community</p>
+        </div>
+
+        <div class="space-y-4 max-h-[65vh] overflow-y-auto pr-3 custom-scrollbar">
             <!-- Personal Information Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-indigo-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    Personal Information
+                </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     <!-- First Name -->
-                    <div>
-                        <x-input-label for="first_name" :value="__('First Name')" />
-                        <x-text-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus @input="filterAlphabeticOnly('first_name')" />
-                        <x-input-error :messages="$errors->get('first_name')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">First Name *</label>
+                        <input type="text" name="first_name" value="{{ old('first_name') }}" @input="filterAlphabeticOnly('first_name')" required autofocus placeholder="John" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('first_name')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Middle Name -->
-                    <div>
-                        <x-input-label for="middle_name" :value="__('Middle Name (Optional)')" />
-                        <x-text-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')" @input="filterAlphabeticOnly('middle_name')" />
-                        <x-input-error :messages="$errors->get('middle_name')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Middle Name</label>
+                        <input type="text" name="middle_name" value="{{ old('middle_name') }}" @input="filterAlphabeticOnly('middle_name')" placeholder="Optional" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('middle_name')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Last Name -->
-                    <div>
-                        <x-input-label for="last_name" :value="__('Last Name')" />
-                        <x-text-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required @input="filterAlphabeticOnly('last_name')" />
-                        <x-input-error :messages="$errors->get('last_name')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Last Name *</label>
+                        <input type="text" name="last_name" value="{{ old('last_name') }}" @input="filterAlphabeticOnly('last_name')" required placeholder="Doe" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('last_name')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Suffix -->
-                    <div>
-                        <x-input-label for="suffix" :value="__('Suffix (Jr, Sr, III, etc.)')" />
-                        <x-text-input id="suffix" class="block mt-1 w-full" type="text" name="suffix" :value="old('suffix')" placeholder="Jr, Sr, III" @input="filterAlphabeticOnly('suffix')" />
-                        <x-input-error :messages="$errors->get('suffix')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Suffix</label>
+                        <input type="text" name="suffix" value="{{ old('suffix') }}" @input="filterAlphabeticOnly('suffix')" placeholder="Jr, Sr, III" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('suffix')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Date of Birth -->
-                    <div>
-                        <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
-                        <x-text-input id="date_of_birth" class="block mt-1 w-full" type="date" name="date_of_birth" :value="old('date_of_birth')" required x-on:change="calculateAge()" />
-                        <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2" />
+                    <div class="col-span-2 sm:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Date of Birth *</label>
+                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required @change="calculateAge()" class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('date_of_birth')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Age -->
-                    <div>
-                        <x-input-label for="age" :value="__('Age')" />
-                        <div class="block mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700 font-medium">
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Age</label>
+                        <div class="w-full bg-white/5 border border-white/20 text-white rounded-lg px-3 py-2 text-sm font-semibold">
                             <span x-text="age || '—'"></span>
                         </div>
-                        <input id="age" type="hidden" name="age" x-model="age" />
-                        <p class="mt-1 text-xs text-gray-500">Automatically calculated from date of birth</p>
-                        <x-input-error :messages="$errors->get('age')" class="mt-2" />
+                        <input type="hidden" name="age" x-model="age" />
                     </div>
 
                     <!-- Gender -->
-                    <div>
-                        <x-input-label for="gender" :value="__('Gender')" />
-                        <select id="gender" name="gender" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                            <option value="">Select Gender</option>
-                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
-                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
-                            <option value="other" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
+                    <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Gender *</label>
+                        <select name="gender" required class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition">
+                            <option value="" class="bg-slate-800">Select</option>
+                            <option value="male" class="bg-slate-800" {{ old('gender') == 'male' ? 'selected' : '' }}>Male</option>
+                            <option value="female" class="bg-slate-800" {{ old('gender') == 'female' ? 'selected' : '' }}>Female</option>
+                            <option value="other" class="bg-slate-800" {{ old('gender') == 'other' ? 'selected' : '' }}>Other</option>
                         </select>
-                        <x-input-error :messages="$errors->get('gender')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('gender')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Civil Status -->
-                    <div>
-                        <x-input-label for="civil_status" :value="__('Civil Status')" />
-                        <select id="civil_status" name="civil_status" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                            <option value="">Select Status</option>
-                            <option value="single" {{ old('civil_status') == 'single' ? 'selected' : '' }}>Single</option>
-                            <option value="married" {{ old('civil_status') == 'married' ? 'selected' : '' }}>Married</option>
-                            <option value="widowed" {{ old('civil_status') == 'widowed' ? 'selected' : '' }}>Widowed</option>
-                            <option value="separated" {{ old('civil_status') == 'separated' ? 'selected' : '' }}>Separated</option>
-                            <option value="divorced" {{ old('civil_status') == 'divorced' ? 'selected' : '' }}>Divorced</option>
+                    <div class="col-span-1 sm:col-span-2 lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Civil Status *</label>
+                        <select name="civil_status" required class="w-full bg-white/10 border border-white/20 text-white rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition">
+                            <option value="" class="bg-slate-800">Select</option>
+                            <option value="single" class="bg-slate-800" {{ old('civil_status') == 'single' ? 'selected' : '' }}>Single</option>
+                            <option value="married" class="bg-slate-800" {{ old('civil_status') == 'married' ? 'selected' : '' }}>Married</option>
+                            <option value="widowed" class="bg-slate-800" {{ old('civil_status') == 'widowed' ? 'selected' : '' }}>Widowed</option>
+                            <option value="separated" class="bg-slate-800" {{ old('civil_status') == 'separated' ? 'selected' : '' }}>Separated</option>
+                            <option value="divorced" class="bg-slate-800" {{ old('civil_status') == 'divorced' ? 'selected' : '' }}>Divorced</option>
                         </select>
-                        <x-input-error :messages="$errors->get('civil_status')" class="mt-2" />
+                        <x-input-error :messages="$errors->get('civil_status')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Occupation -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="occupation" :value="__('Occupation (Optional)')" />
-                        <x-text-input id="occupation" class="block mt-1 w-full" type="text" name="occupation" :value="old('occupation')" placeholder="e.g., Teacher, Engineer, Self-employed" @input="filterAlphabeticOnly('occupation')" />
-                        <x-input-error :messages="$errors->get('occupation')" class="mt-2" />
+                    <div class="col-span-2 sm:col-span-3 lg:col-span-2">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Occupation</label>
+                        <input type="text" name="occupation" value="{{ old('occupation') }}" @input="filterAlphabeticOnly('occupation')" placeholder="e.g., Teacher, Engineer" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('occupation')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
 
             <!-- Identification Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Identification</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" />
+                    </svg>
+                    Identification
+                </h3>
                 
-                <div class="space-y-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                     <!-- National ID Number -->
-                    <div>
-                        <x-input-label for="national_id" :value="__('Philippine National ID Number')" />
-                        <x-text-input id="national_id" class="block mt-1 w-full uppercase" type="text" name="national_id" :value="old('national_id')" required placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" @input="formatNationalId($event)" />
-                        <p class="mt-1 text-xs text-gray-500">Format: 4 digits - 4 digits - 4 digits - 4 digits (auto-formatted)</p>
-                        <x-input-error :messages="$errors->get('national_id')" class="mt-2" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Philippine National ID Number *</label>
+                        <input type="text" name="national_id" value="{{ old('national_id') }}" required placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" @input="formatNationalId($event)" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition uppercase" />
+                        <p class="mt-1 text-xs text-white/50">Format: 4-4-4-4 (auto-formatted)</p>
+                        <x-input-error :messages="$errors->get('national_id')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- National ID Image Upload -->
-                    <div>
-                        <x-input-label for="national_id_image" :value="__('Upload National ID Image')" />
-                        <div class="mt-2">
-                            <div class="flex items-center justify-center w-full">
-                                <label for="national_id_image" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition">
-                                    <div x-show="!imagePreview" class="flex flex-col items-center justify-center pt-5 pb-6">
-                                        <svg class="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-2">Upload National ID Image *</label>
+                        <div class="relative">
+                            <label for="national_id_image" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-white/30 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition">
+                                <div x-show="!imagePreview" class="flex flex-col items-center justify-center pt-3 pb-4">
+                                    <svg class="w-8 h-8 mb-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    <p class="text-xs text-white/70"><span class="font-semibold">Click</span> or drag drop</p>
+                                </div>
+                                <div x-show="imagePreview" class="relative w-full h-full p-2">
+                                    <img :src="imagePreview" alt="ID Preview" class="w-full h-full object-contain rounded-lg">
+                                    <button @click.prevent="clearImage()" type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 shadow-lg">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                         </svg>
-                                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-                                        <p class="text-xs text-gray-500">PNG, JPG or JPEG (MAX. 2MB)</p>
-                                    </div>
-                                    <div x-show="imagePreview" class="relative w-full h-full p-4">
-                                        <img :src="imagePreview" alt="ID Preview" class="w-full h-full object-contain rounded-lg">
-                                        <button @click.prevent="clearImage()" type="button" class="absolute top-6 right-6 bg-red-500 text-white rounded-full p-2 hover:bg-red-600 shadow-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                    <input id="national_id_image" name="national_id_image" type="file" class="hidden" accept="image/jpeg,image/png,image/jpg" @change="previewImage($event)" required />
-                                </label>
-                            </div>
-                            <p class="mt-2 text-xs text-gray-500">
-                                <strong>Note:</strong> Please upload a clear photo of your Philippine National ID (front side). This will be used for verification purposes only.
-                            </p>
-                            <x-input-error :messages="$errors->get('national_id_image')" class="mt-2" />
+                                    </button>
+                                </div>
+                                <input id="national_id_image" name="national_id_image" type="file" class="hidden" accept="image/jpeg,image/png,image/jpg" @change="previewImage($event)" required />
+                            </label>
                         </div>
+                        <x-input-error :messages="$errors->get('national_id_image')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
 
             <!-- Contact Information Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Contact Information</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773c.346.998.956 2.447 1.945 3.435 1.002 1.002 2.505 1.612 3.554 1.945l.774-1.548a1 1 0 011.059-.54l4.436.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                    </svg>
+                    Contact Information
+                </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     <!-- Email -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="email" :value="__('Email Address')" />
-                        <x-text-input id="email" class="block mt-1 w-full lowercase" type="email" name="email" :value="old('email')" required />
-                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Email Address *</label>
+                        <input type="email" name="email" value="{{ old('email') }}" required placeholder="your@email.com" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Phone -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="phone" :value="__('Phone Number')" />
-                        <x-text-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" />
-                        <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Phone Number *</label>
+                        <input type="text" name="phone" value="{{ old('phone') }}" required placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('phone')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
 
             <!-- Address Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Address Information</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                    </svg>
+                    Address Information
+                </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     <!-- House Number -->
-                    <div>
-                        <x-input-label for="house_number" :value="__('House/Unit Number')" />
-                        <x-text-input id="house_number" class="block mt-1 w-full" type="text" name="house_number" :value="old('house_number')" placeholder="e.g., 123" />
-                        <x-input-error :messages="$errors->get('house_number')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">House/Unit #</label>
+                        <input type="text" name="house_number" value="{{ old('house_number') }}" placeholder="123" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('house_number')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Street -->
-                    <div>
-                        <x-input-label for="street" :value="__('Street/Subdivision')" />
-                        <x-text-input id="street" class="block mt-1 w-full" type="text" name="street" :value="old('street')" required placeholder="e.g., Main Street" />
-                        <x-input-error :messages="$errors->get('street')" class="mt-2" />
+                    <div class="col-span-2 sm:col-span-2 lg:col-span-2">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Street/Subdivision *</label>
+                        <input type="text" name="street" value="{{ old('street') }}" required placeholder="Main St" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('street')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Barangay -->
-                    <div>
-                        <x-input-label for="barangay" :value="__('Barangay')" />
-                        <x-text-input id="barangay" class="block mt-1 w-full" type="text" name="barangay" :value="old('barangay')" required />
-                        <x-input-error :messages="$errors->get('barangay')" class="mt-2" />
+                    <div class="col-span-1 sm:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Barangay *</label>
+                        <input type="text" name="barangay" value="{{ old('barangay') }}" required placeholder="Barangay" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('barangay')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- City -->
-                    <div>
-                        <x-input-label for="city" :value="__('City/Municipality')" />
-                        <x-text-input id="city" class="block mt-1 w-full" type="text" name="city" :value="old('city')" required />
-                        <x-input-error :messages="$errors->get('city')" class="mt-2" />
+                    <div class="col-span-1 sm:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">City/Municipality *</label>
+                        <input type="text" name="city" value="{{ old('city') }}" required placeholder="City" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('city')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Province -->
-                    <div>
-                        <x-input-label for="province" :value="__('Province')" />
-                        <x-text-input id="province" class="block mt-1 w-full" type="text" name="province" :value="old('province')" required />
-                        <x-input-error :messages="$errors->get('province')" class="mt-2" />
+                    <div class="col-span-1 sm:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Province *</label>
+                        <input type="text" name="province" value="{{ old('province') }}" required placeholder="Province" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('province')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Zip Code -->
-                    <div>
-                        <x-input-label for="zip_code" :value="__('Zip Code')" />
-                        <x-text-input id="zip_code" class="block mt-1 w-full" type="text" name="zip_code" :value="old('zip_code')" placeholder="e.g., 1000" />
-                        <x-input-error :messages="$errors->get('zip_code')" class="mt-2" />
+                    <div class="col-span-1 sm:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Zip Code</label>
+                        <input type="text" name="zip_code" value="{{ old('zip_code') }}" placeholder="1000" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('zip_code')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
 
             <!-- Emergency Contact Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Emergency Contact (Optional)</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                    </svg>
+                    Emergency Contact (Optional)
+                </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
                     <!-- Emergency Contact Name -->
-                    <div>
-                        <x-input-label for="emergency_contact_name" :value="__('Contact Person Name')" />
-                        <x-text-input id="emergency_contact_name" class="block mt-1 w-full" type="text" name="emergency_contact_name" :value="old('emergency_contact_name')" @input="filterAlphabeticOnly('emergency_contact_name')" />
-                        <x-input-error :messages="$errors->get('emergency_contact_name')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Contact Name</label>
+                        <input type="text" name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" @input="filterAlphabeticOnly('emergency_contact_name')" placeholder="Full name" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('emergency_contact_name')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Emergency Contact Relationship -->
-                    <div>
-                        <x-input-label for="emergency_contact_relationship" :value="__('Relationship')" />
-                        <x-text-input id="emergency_contact_relationship" class="block mt-1 w-full" type="text" name="emergency_contact_relationship" :value="old('emergency_contact_relationship')" placeholder="e.g., Mother, Sister, Friend" @input="filterAlphabeticOnly('emergency_contact_relationship')" />
-                        <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Relationship</label>
+                        <input type="text" name="emergency_contact_relationship" value="{{ old('emergency_contact_relationship') }}" @input="filterAlphabeticOnly('emergency_contact_relationship')" placeholder="Mother" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('emergency_contact_relationship')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Emergency Contact Phone -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="emergency_contact_phone" :value="__('Contact Phone Number')" />
-                        <x-text-input id="emergency_contact_phone" class="block mt-1 w-full" type="text" name="emergency_contact_phone" :value="old('emergency_contact_phone')" placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" />
-                        <x-input-error :messages="$errors->get('emergency_contact_phone')" class="mt-2" />
+                    <div class="col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Phone #</label>
+                        <input type="text" name="emergency_contact_phone" value="{{ old('emergency_contact_phone') }}" placeholder="09XXXXXXXXX" maxlength="11" @input="formatPhoneNumber($event)" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('emergency_contact_phone')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
 
             <!-- Account Security Section -->
-            <div class="bg-gray-50 p-4 rounded-lg">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Account Security</h3>
+            <div class="bg-white/5 p-4 rounded-xl border border-white/10">
+                <h3 class="text-base font-bold text-white mb-3 flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-rose-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                    </svg>
+                    Account Security
+                </h3>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3">
                     <!-- Password -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="password" :value="__('Password')" />
-                        <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-                        <p class="mt-1 text-xs text-gray-500">Minimum 8 characters</p>
-                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Password *</label>
+                        <input type="password" name="password" required autocomplete="new-password" placeholder="Min. 8 characters" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('password')" class="mt-1 text-red-400 text-xs" />
                     </div>
 
                     <!-- Confirm Password -->
-                    <div class="md:col-span-2">
-                        <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-                        <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
-                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+                    <div class="lg:col-span-1">
+                        <label class="block text-xs font-medium text-white/80 mb-1">Confirm Password *</label>
+                        <input type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Re-enter password" class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-lg px-3 py-2 text-sm focus:border-indigo-400 focus:bg-white/15 transition" />
+                        <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1 text-red-400 text-xs" />
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="flex items-center justify-between mt-6">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
+        <!-- Form Actions -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-white/10">
+            <a href="{{ route('login') }}" class="text-sm text-indigo-400 hover:text-indigo-300 transition">
+                Already have an account? Sign in
             </a>
 
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
+            <button type="submit" class="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition shadow-lg hover:shadow-xl">
+                Create Account
+            </button>
         </div>
     </form>
 
