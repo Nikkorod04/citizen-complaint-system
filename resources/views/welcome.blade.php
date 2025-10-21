@@ -80,7 +80,6 @@
                         <img src="{{ asset('/logo.png') }}" alt="Logo" class="h-8 w-8 object-contain">
                         <div class="flex flex-col">
                             <span class="text-sm font-bold text-gray-800">Barangay Complaint System</span>
-                            <span class="text-xs text-gray-600">Official Government Platform</span>
                         </div>
                     </div>
                     <div class="flex items-center space-x-3">
