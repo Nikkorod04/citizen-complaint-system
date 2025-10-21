@@ -99,6 +99,7 @@ database/                 → Migrations & seeders
 - `phone` (String)
 - `house_number`, `street`, `barangay`, `city`, `province`, `zip_code` (Address fields)
 - `emergency_contact_name`, `emergency_contact_relationship`, `emergency_contact_phone` (Emergency contact)
+- `qr_code` (String/URL) - Unique QR code generated upon successful registration
 - `created_at`, `updated_at` (Timestamps)
 
 #### 3. **complaints** table (Main Complaint Records)
@@ -114,7 +115,6 @@ database/                 → Migrations & seeders
 - `secretary_remarks` (Text, Nullable)
 - `captain_remarks` (Text, Nullable)
 - `resolution_notes` (Text, Nullable)
-- `qr_code` (String/URL) - Unique QR code for complaint
 - `created_at`, `updated_at` (Timestamps)
 
 #### 4. **complaint_status_logs** table (Status Change History)
@@ -174,10 +174,10 @@ Complaint (1) ──── (M) Media (evidence files, ID images)
 #### Role-Based Access Control (RBAC)
 ```
 CITIZEN
-  └─ Register → Verify profile → Submit complaints → Track complaints → View QR code
+  └─ Register → Receive QR code → Verify profile → Submit complaints → Track complaints
   └─ Upload evidence (photos, videos)
   └─ View complaint history & status updates
-  └─ Manage personal profile
+  └─ Manage personal profile & registration QR code
 
 SECRETARY
   └─ View pending complaints
@@ -241,18 +241,19 @@ CAPTAIN
 ### 4.3 QR Code Integration
 
 #### QR Code Features
-- **Generation**: Automatic QR code created per complaint
+- **Generation**: Automatic QR code created upon successful citizen registration
 - **Format**: SVG-based using BaconQrCode library
-- **Content**: Encodes complaint reference number or URL
-- **Display**: Shown in citizen dashboard
-- **Scanning**: Citizens can scan to quickly access complaint details
-- **URL Format**: `{domain}/complaint/{complaint_id}/qr`
+- **Content**: Encodes citizen reference number or citizen profile URL
+- **Display**: Shown in citizen registration confirmation & citizen dashboard
+- **Scanning**: Citizens can scan to quickly access their profile & complaints
+- **URL Format**: `{domain}/citizen/{citizen_id}/qr`
 
 #### Use Cases
-- Quick reference for follow-up inquiries
-- Display on printed complaint receipts
-- Community bulletin board posting
-- Mobile access without account login
+- Quick reference for citizen identification
+- Display on printed registration certificates
+- Community verification by barangay officials
+- Mobile access to citizen profile without account login
+- Evidence of successful registration
 
 ### 4.4 File Management
 
@@ -345,7 +346,6 @@ CAPTAIN
 - **Complaint Details** (`/complaints/{id}`)
   - Full complaint information
   - Status timeline
-  - QR code display
   - Evidence gallery
   - Status update notifications
   - Secretary & Captain remarks visible
@@ -646,20 +646,30 @@ brgy-complaint-system/
 - **Role**: Regular Citizen
 - **Process**: Use registration page to create account
 - **Features**: File complaints, track status, manage profile
+- **QR Code**: Generated automatically upon successful registration for citizen identification
 
 ---
 
 ## 10. KEY WORKFLOWS
 
-### Workflow 1: Complaint Filing
+### Workflow 1: Citizen Registration & QR Generation
 ```
 Citizen Registration
     ↓
-Account Verified
+Submit Personal & Identification Information
     ↓
+Account Created
+    ↓
+QR Code Generated Automatically
+    ↓
+Citizen Receives QR Code for Identification
+    ↓
+Can Now File Complaints
+```
+
+### Workflow 2: Complaint Filing
+```
 File Complaint
-    ↓
-Automatic QR Generation
     ↓
 Secretary Verification
     ↓
@@ -670,7 +680,7 @@ Progress Tracking
 Resolution & Closure
 ```
 
-### Workflow 2: Secretary Verification
+### Workflow 3: Secretary Verification
 ```
 Pending Complaints Queue
     ↓
@@ -687,7 +697,7 @@ Send to Captain (if approved)
 Back to Citizen (if rejected)
 ```
 
-### Workflow 3: Captain Resolution
+### Workflow 4: Captain Resolution
 ```
 Verified Complaints Queue
     ↓
@@ -816,7 +826,7 @@ The Barangay Complaint System represents a modern, professional solution for com
 ✅ Role-based access control (3 distinct roles)
 ✅ Secure user authentication & data protection
 ✅ Real-time complaint tracking & status updates
-✅ QR code integration for accessibility
+✅ QR code integration for citizen identification & registration verification
 ✅ Professional, government-appropriate UI
 ✅ Comprehensive input validation & formatting
 ✅ Mobile-responsive design
