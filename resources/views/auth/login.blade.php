@@ -85,6 +85,15 @@
                     <span><strong>Secretary:</strong> secretary@mail.com</span>
                     <span class="text-blue-700">/ password</span>
                 </div>
+                <hr class="my-2 border-blue-300">
+                <div class="flex justify-between items-center">
+                    <span><strong>Tanod 1:</strong> tanod1@mail.com</span>
+                    <span class="text-blue-700">/ password</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span><strong>Tanod 2:</strong> tanod2@mail.com</span>
+                    <span class="text-blue-700">/ password</span>
+                </div>
             </div>
         </div>
     </form>

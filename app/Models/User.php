@@ -124,6 +124,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Check if user is a tanod
+     */
+    public function isTanod(): bool
+    {
+        return $this->role === 'tanod';
+    }
+
+    /**
      * Check if user is verified
      */
     public function isVerified(): bool
@@ -153,5 +161,29 @@ class User extends Authenticatable
     public function resolvedComplaints(): HasMany
     {
         return $this->hasMany(Complaint::class, 'resolved_by');
+    }
+
+    /**
+     * Get urgent requests submitted by this user (citizen)
+     */
+    public function submittedUrgentRequests(): HasMany
+    {
+        return $this->hasMany(UrgentRequest::class, 'citizen_id');
+    }
+
+    /**
+     * Get urgent requests assigned to this user (tanod)
+     */
+    public function assignedUrgentRequests(): HasMany
+    {
+        return $this->hasMany(UrgentRequest::class, 'tanod_id');
+    }
+
+    /**
+     * Get urgent request updates made by this user (tanod)
+     */
+    public function urgentRequestUpdates(): HasMany
+    {
+        return $this->hasMany(UrgentRequestUpdate::class, 'tanod_id');
     }
 }

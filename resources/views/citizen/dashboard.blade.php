@@ -84,7 +84,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <a href="{{ route('complaints.create') }}" class="flex items-center p-4 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition">
                             <svg class="h-8 w-8 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -92,6 +92,16 @@
                             <div>
                                 <p class="font-semibold text-gray-900">File New Complaint</p>
                                 <p class="text-sm text-gray-600">Submit a new complaint</p>
+                            </div>
+                        </a>
+
+                        <a href="{{ route('urgent-requests.create') }}" class="flex items-center p-4 bg-red-50 hover:bg-red-100 rounded-lg transition">
+                            <svg class="h-8 w-8 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 0v2m0-2H9m3 0h3M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                            </svg>
+                            <div>
+                                <p class="font-semibold text-gray-900">Urgent Report</p>
+                                <p class="text-sm text-gray-600">Submit emergency request</p>
                             </div>
                         </a>
 

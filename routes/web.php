@@ -4,7 +4,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CitizenController;
 use App\Http\Controllers\SecretaryController;
 use App\Http\Controllers\CaptainController;
+use App\Http\Controllers\TanodController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\UrgentRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,6 +31,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('secretary.dashboard');
     } elseif ($user->isCaptain()) {
         return redirect()->route('captain.dashboard');
+    } elseif ($user->isTanod()) {
+        return redirect()->route('tanod.dashboard');
     }
     
     return view('dashboard');
@@ -68,9 +72,27 @@ Route::middleware(['auth', 'role:captain'])->prefix('captain')->name('captain.')
     Route::get('/reports/export', [CaptainController::class, 'exportReport'])->name('reports.export');
 });
 
+// Tanod Routes
+Route::middleware(['auth', 'role:tanod', 'verified.citizen'])->prefix('tanod')->name('tanod.')->group(function () {
+    Route::get('/dashboard', [TanodController::class, 'dashboard'])->name('dashboard');
+    Route::get('/pending', [TanodController::class, 'pending'])->name('pending');
+    Route::get('/assigned', [TanodController::class, 'assigned'])->name('assigned');
+    Route::get('/resolved', [TanodController::class, 'resolved'])->name('resolved');
+    Route::get('/{urgent_request}', [TanodController::class, 'show'])->name('show');
+    Route::post('/{urgent_request}/assign', [TanodController::class, 'assign'])->name('assign');
+    Route::post('/{urgent_request}/update-status', [TanodController::class, 'updateStatus'])->name('update-status');
+});
+
 // Complaint Routes (Accessible by verified citizens)
 Route::middleware(['auth', 'role:citizen', 'verified.citizen'])->group(function () {
     Route::resource('complaints', ComplaintController::class);
+});
+
+// Urgent Request Routes (Accessible by verified citizens)
+Route::middleware(['auth', 'role:citizen', 'verified.citizen'])->group(function () {
+    Route::resource('urgent-requests', UrgentRequestController::class);
+    Route::post('/urgent-requests/{urgent_request}/cancel', [UrgentRequestController::class, 'cancel'])->name('urgent-requests.cancel');
+    Route::get('/urgent-requests/{urgent_request}/track', [UrgentRequestController::class, 'track'])->name('urgent-requests.track');
 });
 
 // Profile Routes
