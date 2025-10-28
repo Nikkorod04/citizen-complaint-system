@@ -3,7 +3,7 @@
 ## File Created: `for_copilot.md`
 
 This file contains **18 comprehensive sections** providing complete documentation of the Barangay Complaint System for GitHub Copilot.
-
+s
 ### What Copilot Will Learn From This File
 
 #### 1. **System Architecture** (Sections 1-2)

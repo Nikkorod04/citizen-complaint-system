@@ -72,6 +72,14 @@ class RegisteredUserController extends Controller
             $nationalIdImagePath = $request->file('national_id_image')->store('national-ids', 'public');
         }
 
+        // Calculate age from date of birth if not provided or calculate on backend
+        $age = $request->age;
+        if (!$age) {
+            $birthDate = new \DateTime($request->date_of_birth);
+            $today = new \DateTime();
+            $age = $today->diff($birthDate)->y;
+        }
+
         $user = User::create([
             'first_name' => $request->first_name,
             'middle_name' => $request->middle_name,
@@ -82,7 +90,7 @@ class RegisteredUserController extends Controller
             'national_id' => $request->national_id,
             'national_id_image' => $nationalIdImagePath,
             'date_of_birth' => $request->date_of_birth,
-            'age' => $request->age,
+            'age' => $age,
             'gender' => $request->gender,
             'civil_status' => $request->civil_status,
             'phone' => $request->phone,

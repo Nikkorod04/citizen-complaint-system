@@ -50,7 +50,7 @@
                     <!-- Date of Birth -->
                     <div class="col-span-2 sm:col-span-1">
                         <label class="block text-xs font-medium text-gray-800 mb-1">Date of Birth *</label>
-                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required @change="calculateAge()" class="w-full bg-white/70 border border-gray-300 text-gray-900 rounded-lg px-3 py-2 text-sm focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-500 transition" />
+                        <input type="date" name="date_of_birth" x-model="dateOfBirth" value="{{ old('date_of_birth') }}" required @change="calculateAge()" class="w-full bg-white/70 border border-gray-300 text-gray-900 rounded-lg px-3 py-2 text-sm focus:border-blue-600 focus:bg-white focus:ring-1 focus:ring-blue-500 transition" />
                         <x-input-error :messages="$errors->get('date_of_birth')" class="mt-1 text-red-600 text-xs" />
                     </div>
 
