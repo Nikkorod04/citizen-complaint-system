@@ -215,4 +215,86 @@ class CaptainController extends Controller
         
         return $pdf->download('barangay-complaints-report-' . now()->format('Y-m-d') . '.pdf');
     }
+
+    /**
+     * List all complaint categories
+     */
+    public function listCategories()
+    {
+        $categories = ComplaintCategory::withCount('complaints')->latest()->paginate(15);
+        return view('captain.categories.index', compact('categories'));
+    }
+
+    /**
+     * Show create category form
+     */
+    public function createCategory()
+    {
+        return view('captain.categories.create');
+    }
+
+    /**
+     * Store a new complaint category
+     */
+    public function storeCategory(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:complaint_categories,name'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'republic_act' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active', true);
+
+        ComplaintCategory::create($validated);
+
+        return redirect()->route('captain.categories.index')
+            ->with('success', 'Complaint category created successfully!');
+    }
+
+    /**
+     * Show edit category form
+     */
+    public function editCategory(ComplaintCategory $complaint_category)
+    {
+        return view('captain.categories.edit', ['category' => $complaint_category]);
+    }
+
+    /**
+     * Update complaint category
+     */
+    public function updateCategory(Request $request, ComplaintCategory $complaint_category)
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'unique:complaint_categories,name,' . $complaint_category->id],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'republic_act' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['boolean'],
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active');
+
+        $complaint_category->update($validated);
+
+        return redirect()->route('captain.categories.index')
+            ->with('success', 'Complaint category updated successfully!');
+    }
+
+    /**
+     * Delete complaint category
+     */
+    public function destroyCategory(ComplaintCategory $complaint_category)
+    {
+        // Check if category has complaints
+        if ($complaint_category->complaints()->count() > 0) {
+            return redirect()->route('captain.categories.index')
+                ->with('error', 'Cannot delete category with existing complaints. Please reassign complaints first.');
+        }
+
+        $complaint_category->delete();
+
+        return redirect()->route('captain.categories.index')
+            ->with('success', 'Complaint category deleted successfully!');
+    }
 }

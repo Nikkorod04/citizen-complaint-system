@@ -58,6 +58,15 @@ Route::middleware(['auth', 'role:secretary'])->prefix('secretary')->name('secret
     Route::get('/pending-complaints', [SecretaryController::class, 'pendingComplaints'])->name('pending-complaints');
     Route::post('/complaints/{complaint}/validate', [SecretaryController::class, 'validateComplaint'])->name('complaints.validate');
     Route::post('/complaints/{complaint}/reject', [SecretaryController::class, 'rejectComplaint'])->name('complaints.reject');
+    
+    // Citizen Management (CRUD)
+    Route::get('/citizens', [SecretaryController::class, 'manageCitizens'])->name('citizens.index');
+    Route::get('/citizens/create', [SecretaryController::class, 'createCitizen'])->name('citizens.create');
+    Route::post('/citizens', [SecretaryController::class, 'storeCitizen'])->name('citizens.store');
+    Route::get('/citizens/{user}/edit', [SecretaryController::class, 'editCitizen'])->name('citizens.edit');
+    Route::put('/citizens/{user}', [SecretaryController::class, 'updateCitizen'])->name('citizens.update');
+    Route::delete('/citizens/{user}', [SecretaryController::class, 'deleteCitizen'])->name('citizens.destroy');
+    Route::get('/citizens/{user}', [SecretaryController::class, 'showCitizen'])->name('citizens.show');
 });
 
 // Captain Routes
@@ -70,6 +79,14 @@ Route::middleware(['auth', 'role:captain'])->prefix('captain')->name('captain.')
     Route::get('/analytics', [CaptainController::class, 'analytics'])->name('analytics');
     Route::get('/reports', [CaptainController::class, 'reports'])->name('reports');
     Route::get('/reports/export', [CaptainController::class, 'exportReport'])->name('reports.export');
+    
+    // Complaint Categories CRUD
+    Route::get('/categories', [CaptainController::class, 'listCategories'])->name('categories.index');
+    Route::get('/categories/create', [CaptainController::class, 'createCategory'])->name('categories.create');
+    Route::post('/categories', [CaptainController::class, 'storeCategory'])->name('categories.store');
+    Route::get('/categories/{complaint_category}/edit', [CaptainController::class, 'editCategory'])->name('categories.edit');
+    Route::put('/categories/{complaint_category}', [CaptainController::class, 'updateCategory'])->name('categories.update');
+    Route::delete('/categories/{complaint_category}', [CaptainController::class, 'destroyCategory'])->name('categories.destroy');
 });
 
 // Tanod Routes
