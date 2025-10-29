@@ -118,8 +118,9 @@
                                 <!-- National ID -->
                                 <div class="md:col-span-2">
                                     <label for="national_id" class="block text-sm font-bold text-gray-900 mb-2">National ID (PhilID, Driver's License, etc.) <span class="text-red-600">*</span></label>
-                                    <input type="text" id="national_id" name="national_id" value="{{ old('national_id') }}" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('national_id') border-red-500 @enderror" />
+                                    <input type="text" id="national_id" name="national_id" value="{{ old('national_id') }}" required maxlength="19" @input="formatNationalId($event)" placeholder="XXXX-XXXX-XXXX-XXXX" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('national_id') border-red-500 @enderror" />
                                     @error('national_id') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+                                    <p class="text-xs text-gray-500 mt-1">Format: 4-4-4-4 (auto-formatted)</p>
                                 </div>
 
                                 <!-- National ID Image -->
@@ -214,15 +215,15 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <!-- Emergency Contact Name -->
                                 <div>
-                                    <label for="emergency_contact_name" class="block text-sm font-bold text-gray-900 mb-2">Name <span class="text-red-600">*</span></label>
-                                    <input type="text" id="emergency_contact_name" name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" required @input="filterAlphabeticOnly($event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('emergency_contact_name') border-red-500 @enderror" />
+                                    <label for="emergency_contact_name" class="block text-sm font-bold text-gray-900 mb-2">Name</label>
+                                    <input type="text" id="emergency_contact_name" name="emergency_contact_name" value="{{ old('emergency_contact_name') }}" @input="filterAlphabeticOnly($event)" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('emergency_contact_name') border-red-500 @enderror" />
                                     @error('emergency_contact_name') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                                 </div>
 
                                 <!-- Emergency Contact Number -->
                                 <div>
-                                    <label for="emergency_contact_number" class="block text-sm font-bold text-gray-900 mb-2">Phone Number <span class="text-red-600">*</span></label>
-                                    <input type="text" id="emergency_contact_number" name="emergency_contact_number" value="{{ old('emergency_contact_number') }}" required maxlength="11" @input="formatPhoneNumber($event)" placeholder="09XXXXXXXXX" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('emergency_contact_number') border-red-500 @enderror" />
+                                    <label for="emergency_contact_number" class="block text-sm font-bold text-gray-900 mb-2">Phone Number</label>
+                                    <input type="text" id="emergency_contact_number" name="emergency_contact_number" value="{{ old('emergency_contact_number') }}" maxlength="11" @input="formatPhoneNumber($event)" placeholder="09XXXXXXXXX" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-blue-600 focus:ring-1 focus:ring-blue-500 @error('emergency_contact_number') border-red-500 @enderror" />
                                     @error('emergency_contact_number') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
                                 </div>
                             </div>
@@ -270,6 +271,26 @@
             filterAlphabeticOnly(event) {
                 // Allow only letters, spaces, and hyphens
                 event.target.value = event.target.value.replace(/[^a-zA-Z\s\-]/g, '');
+            },
+            formatNationalId(event) {
+                // Remove all non-numeric characters
+                let value = event.target.value.replace(/\D/g, '');
+                
+                // Limit to 16 digits
+                if (value.length > 16) {
+                    value = value.slice(0, 16);
+                }
+                
+                // Format as 4-4-4-4
+                let formatted = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) {
+                        formatted += '-';
+                    }
+                    formatted += value[i];
+                }
+                
+                event.target.value = formatted;
             },
             formatPhoneNumber(event) {
                 // Remove all non-numeric characters
